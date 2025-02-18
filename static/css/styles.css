@@ -1,0 +1,13 @@
+/* styles.css - Main stylesheet */
+body {
+    text-align: center;
+    font-family: Arial, sans-serif;
+    background: black;
+    color: white;
+}
+
+#album-art {
+    width: 200px;
+    height: 200px;
+    border-radius: 10px;
+}
