@@ -11,5 +11,5 @@ async function fetchNowPlaying() {
     document.getElementById("artist-name").textContent = data.artist;
 }
 
-setInterval(fetchNowPlaying, 5000);
+setInterval(fetchNowPlaying, 2000);
 fetchNowPlaying();
