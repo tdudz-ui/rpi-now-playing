@@ -1,4 +1,4 @@
 # requirements.txt - Python dependencies
 flask
 spotipy
-dotenv
+python-dotenv
