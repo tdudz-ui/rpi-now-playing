@@ -30,8 +30,8 @@ sudo apt install python3-pip python3-venv git -y
 ### 3️⃣ **Clone This Repository & Set Up Environment**
 
 ```bash
-git clone https://github.com/tdudz-ui/spotify-now-playing.git
-cd spotify-now-playing
+git clone https://github.com/tdudz-ui/rpi-now-playing.git
+cd rpi-now-playing
 python3 -m venv venv
 source venv/bin/activate
 pip install -r requirements.txt
