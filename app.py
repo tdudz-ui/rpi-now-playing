@@ -7,33 +7,33 @@ import os
 
 # Load environment variables
 load_dotenv()
-
 SPOTIPY_CLIENT_ID = os.getenv("SPOTIPY_CLIENT_ID")
 SPOTIPY_CLIENT_SECRET = os.getenv("SPOTIPY_CLIENT_SECRET")
 SPOTIPY_REDIRECT_URI = os.getenv("SPOTIPY_REDIRECT_URI")
 
+# Spotify API Authorization
+sp = spotipy.Spotify(auth_manager=SpotifyOAuth(
+    client_id=SPOTIPY_CLIENT_ID,
+    client_secret=SPOTIPY_CLIENT_SECRET,
+    redirect_uri=SPOTIPY_REDIRECT_URI,
+    scope="user-read-currently-playing user-modify-playback-state"
+))
+
 app = Flask(__name__)
 
-SPOTIPY_CLIENT_ID = "your_client_id"
-SPOTIPY_CLIENT_SECRET = "your_client_secret"
-SPOTIPY_REDIRECT_URI = "http://localhost:8888/callback"
-SCOPE = "user-read-currently-playing user-modify-playback-state"
-
-sp = spotipy.Spotify(auth_manager=SpotifyOAuth(client_id=SPOTIPY_CLIENT_ID,
-                                               client_secret=SPOTIPY_CLIENT_SECRET,
-                                               redirect_uri=SPOTIPY_REDIRECT_URI,
-                                               scope=SCOPE))
-
 def get_current_track():
-    track = sp.current_user_playing_track()
-    if track is not None:
-        return {
-            "name": track["item"]["name"],
-            "artist": ", ".join([artist["name"] for artist in track["item"]["artists"]]),
-            "album_art": track["item"]["album"]["images"][0]["url"],
-            "progress_ms": track["progress_ms"],
-            "duration_ms": track["item"]["duration_ms"]
-        }
+    try:
+        track = sp.current_user_playing_track()
+        if track and track.get("item"):
+            return {
+                "name": track["item"]["name"],
+                "artist": ", ".join([artist["name"] for artist in track["item"]["artists"]]),
+                "album_art": track["item"]["album"]["images"][0]["url"],
+                "progress_ms": track["progress_ms"],
+                "duration_ms": track["item"]["duration_ms"]
+            }
+    except Exception as e:
+        print(f"Error fetching track: {e}")
     return None
 
 @app.route("/")
@@ -47,23 +47,35 @@ def now_playing():
 
 @app.route("/play")
 def play():
-    sp.start_playback()
-    return jsonify({"status": "Playing"})
+    try:
+        sp.start_playback()
+        return jsonify({"status": "Playing"})
+    except Exception as e:
+        return jsonify({"error": str(e)})
 
 @app.route("/pause")
 def pause():
-    sp.pause_playback()
-    return jsonify({"status": "Paused"})
+    try:
+        sp.pause_playback()
+        return jsonify({"status": "Paused"})
+    except Exception as e:
+        return jsonify({"error": str(e)})
 
 @app.route("/next")
 def next_track():
-    sp.next_track()
-    return jsonify({"status": "Next track"})
+    try:
+        sp.next_track()
+        return jsonify({"status": "Next track"})
+    except Exception as e:
+        return jsonify({"error": str(e)})
 
 @app.route("/previous")
 def previous_track():
-    sp.previous_track()
-    return jsonify({"status": "Previous track"})
+    try:
+        sp.previous_track()
+        return jsonify({"status": "Previous track"})
+    except Exception as e:
+        return jsonify({"error": str(e)})
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000, debug=True)
