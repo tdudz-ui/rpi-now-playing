@@ -16,7 +16,7 @@ app = Flask(__name__)
 
 SPOTIPY_CLIENT_ID = "your_client_id"
 SPOTIPY_CLIENT_SECRET = "your_client_secret"
-SPOTIPY_REDIRECT_URI = "http://localhost:5000/callback"
+SPOTIPY_REDIRECT_URI = "http://localhost:8888/callback"
 SCOPE = "user-read-currently-playing user-modify-playback-state"
 
 sp = spotipy.Spotify(auth_manager=SpotifyOAuth(client_id=SPOTIPY_CLIENT_ID,
